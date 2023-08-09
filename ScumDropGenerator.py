@@ -68,12 +68,18 @@ def multi_zone(zones, drops):
         get_locations(zone, max)
         
 # Creates drops for a random zone, which includes the world
-def random_zone(drops):
+def random_zone(drops, num_of_zones):
     
+    print(f'{drops} in {num_of_zones} random zones')
     dict_list = sorted(zone_dict)
-    zone = random.choice(dict_list)
-    print(f'{drops} in a random zone')
-    get_locations(zone, drops)
+    drops = math.ceil(drops / num_of_zones)
+    
+    while num_of_zones > 0:
+        zone = random.choice(dict_list)
+        if zone == 'WORLD':
+            continue
+        get_locations(zone, drops)
+        num_of_zones = num_of_zones - 1
 
 # Creates drops for a given zone, including the world
 def get_locations(zone, num_of_drops):
@@ -99,8 +105,9 @@ def get_locations(zone, num_of_drops):
 def main():
     min = 10        # the minimum number of drops for random drops
     max = 100       # the maximum number of drops for random drops
-    set = 20         # the set number of drops to create
+    set = 0         # the set number of drops to create
     aoe = ('c2') # the zone (or zones) in which to create drops
+    num_of_zones = 5
 
     # if set is assigned a number, that will be the number of drops
     # else, the number of drops will be random
@@ -114,13 +121,12 @@ def main():
     time.sleep(3)
     pyautogui.click(button="left")
     keyboard.press_and_release('t')
+    print(num_of_zones)
 
     # determines if drops will be created in multiple given zones,
     # a random zone, or a single given zone including the world
-    
-    
-    if aoe == 'random':
-        random_zone(num_of_drops)
+    if num_of_zones > 0:
+        random_zone(num_of_drops, num_of_zones)
     elif len(aoe) > 2:
         multi_zone(aoe, num_of_drops)
     else:
