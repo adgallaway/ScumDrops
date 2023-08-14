@@ -3,7 +3,7 @@ import pyautogui
 import keyboard
 import time
 import math
-
+import configparser
 
 # Scum Drop Generator
 # by Aaron D. Gallaway
@@ -55,6 +55,22 @@ zone_dict = {
     'WORLD': tuple([637685, -922896, -922896, 619200]),
     }
 
+def get_settings():
+    config = configparser.ConfigParser()
+    config.read('settings.ini')
+    min = int(config['settings']['minimum_random'])                     # the minimum number of drops for random drops
+    max = int(config['settings']['maximum_random'])                     # the maximum number of drops for random drops
+    set = int(config['settings']['set_number'])                         # the set number of drops to create
+    lst = config.items('multiple.zones')                                # the zone (or zones) in which to create drops
+    num_of_zones = int(config['settings']['number_of_zones_to_drop'])   # the number of random zones in which to create drops (drops will be even split
+    aoe = []
+
+    # creates list of zones from ini file
+    for key, value in lst:
+        aoe.append(value)
+
+    main(min, max, set, num_of_zones, aoe)
+    
 # Creates drops for a list of zones
 # for multi zones, the given number (random or set)
 # will be split evenly, rounded up, among each zone
@@ -102,12 +118,7 @@ def get_locations(zone, num_of_drops):
     keyboard.write(f'{num_of_drops} cargo drops in {zone}')                        # writes control message indicating how many drops were created in which zone
     keyboard.press_and_release('enter')
 
-def main():
-    min = 10        # the minimum number of drops for random drops
-    max = 100       # the maximum number of drops for random drops
-    set = 0         # the set number of drops to create
-    aoe = ('c2') # the zone (or zones) in which to create drops
-    num_of_zones = 5
+def main(min, max, set, num_of_zones, aoe):
 
     # if set is assigned a number, that will be the number of drops
     # else, the number of drops will be random
@@ -127,7 +138,7 @@ def main():
     # a random zone, or a single given zone including the world
     if num_of_zones > 0:
         random_zone(num_of_drops, num_of_zones)
-    elif len(aoe) > 2:
+    elif len(aoe) > 1:
         multi_zone(aoe, num_of_drops)
     else:
         get_locations(aoe, num_of_drops)
@@ -135,4 +146,4 @@ def main():
     keyboard.press_and_release('escape')
 
 if __name__ == '__main__':
-    main()
+    get_settings()
