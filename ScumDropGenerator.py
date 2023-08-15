@@ -77,9 +77,9 @@ def get_settings():
 def multi_zone(zones, drops):
 
     print(f'{drops} in multiple zones {zones}')
-    if drops % len(zones) != 0:
-        max = math.ceil(drops / len(zones))
-    else: max = drops / len(zones)
+    print(len(zones))
+    num_of_zones = int(len(zones))
+    max = math.ceil(drops / num_of_zones)
     for zone in zones:
         get_locations(zone, max)
         
@@ -141,6 +141,7 @@ def main(min, max, set, num_of_zones, aoe):
     elif len(aoe) > 1:
         multi_zone(aoe, num_of_drops)
     else:
+        aoe = aoe[0]
         get_locations(aoe, num_of_drops)
 
     keyboard.press_and_release('escape')
