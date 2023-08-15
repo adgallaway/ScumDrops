@@ -82,20 +82,32 @@ def multi_zone(zones, drops):
     max = math.ceil(drops / num_of_zones)
     for zone in zones:
         get_locations(zone, max)
-        
+
+
+
 # Creates drops for a random zone, which includes the world
 def random_zone(drops, num_of_zones):
-    
+
+    def check_for_duplicates(zone):
+        list = []
+        list.append(zone)
+        for value in list:
+            if zone == value | zone == 'WORLD':
+                return True
+            else:
+                return False
+
     print(f'{drops} in {num_of_zones} random zones')
     dict_list = sorted(zone_dict)
     drops = math.ceil(drops / num_of_zones)
-    
     while num_of_zones > 0:
         zone = random.choice(dict_list)
-        if zone == 'WORLD':
+        is_duplicate = check_for_duplicates(zone)
+        if is_duplicate == False:
+            get_locations(zone, drops)
+            num_of_zones = num_of_zones - 1
+        else:
             continue
-        get_locations(zone, drops)
-        num_of_zones = num_of_zones - 1
 
 # Creates drops for a given zone, including the world
 def get_locations(zone, num_of_drops):
