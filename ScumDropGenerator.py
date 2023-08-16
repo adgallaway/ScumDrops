@@ -87,12 +87,12 @@ def multi_zone(zones, drops):
 
 # Creates drops for a random zone, which includes the world
 def random_zone(drops, num_of_zones):
-
+    list = []
     def check_for_duplicates(zone):
-        list = []
-        list.append(zone)
+        
         for value in list:
-            if zone == value | zone == 'WORLD':
+            print(f'{zone}, {value}')
+            if zone == value or zone == 'WORLD':
                 return True
             else:
                 return False
@@ -103,6 +103,8 @@ def random_zone(drops, num_of_zones):
     while num_of_zones > 0:
         zone = random.choice(dict_list)
         is_duplicate = check_for_duplicates(zone)
+        list.append(zone)
+        print(is_duplicate)
         if is_duplicate == False:
             get_locations(zone, drops)
             num_of_zones = num_of_zones - 1
